@@ -1,0 +1,168 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+
+android {
+    namespace 'com.parentalcontrol.child'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.parentalcontrol.child"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        buildConfigField "String", "API_BASE_URL", "\"http://10.0.2.2:3000/api/v1/\""
+        buildConfigField "String", "WEBSOCKET_URL", "\"http://10.0.2.2:3000\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_BASE_URL", "\"https://api.parentalcontrol.com/api/v1/\""
+            buildConfigField "String", "WEBSOCKET_URL", "\"https://api.parentalcontrol.com\""
+        }
+        debug {
+            debuggable true
+            testCoverageEnabled true
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+        buildConfig true
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
+    }
+}
+
+dependencies {
+    // Core Android Services
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+    implementation "androidx.work:work-runtime-ktx:2.9.0"
+
+    // Core Android
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.android.material:material:1.11.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+
+    // Architecture Components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.activity:activity-ktx:1.8.2"
+    implementation "androidx.fragment:fragment-ktx:1.6.2"
+
+    // Room Database
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // Network
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.11.0"
+    implementation "com.google.code.gson:gson:$gson_version"
+
+    // WebSocket
+    implementation "io.socket:socket.io-client:2.1.0"
+
+    // Location
+    implementation "com.google.android.gms:play-services-location:$location_version"
+
+    // Firebase
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation "com.google.firebase:firebase-messaging-ktx"
+    implementation "com.google.firebase:firebase-analytics-ktx"
+
+    // VPN & Network
+    implementation "org.pcap4j:pcap4j-core:1.8.2"
+    implementation "org.minidns:minidns-core:1.0.4"
+
+    // ML Kit for on-device AI
+    implementation "com.google.mlkit:language-id:17.0.4"
+    implementation "com.google.mlkit:smart-reply:17.0.2"
+    implementation "com.google.mlkit:translate:17.0.2"
+
+    // TensorFlow Lite
+    implementation "org.tensorflow:tensorflow-lite:2.14.0"
+    implementation "org.tensorflow:tensorflow-lite-support:0.4.4"
+
+    // Encryption
+    implementation "androidx.security:security-crypto:1.1.0-alpha06"
+
+    // Biometric
+    implementation "androidx.biometric:biometric:1.1.0"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    // Permissions
+    implementation "pub.devrel:easypermissions:3.0.0"
+
+    // Image Loading
+    implementation "com.github.bumptech.glide:glide:4.16.0"
+    kapt "com.github.bumptech.glide:compiler:4.16.0"
+
+    // Date/Time
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.4.1"
+
+    // Testing Dependencies
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.mockito:mockito-core:5.7.0"
+    testImplementation "org.mockito:mockito-inline:5.2.0"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "androidx.test.ext:junit:1.1.5"
+    testImplementation "androidx.test.espresso:espresso-core:3.5.1"
+    testImplementation "androidx.test:core-ktx:1.5.0"
+    testImplementation "androidx.test.ext:junit-ktx:1.1.5"
+    testImplementation "org.robolectric:robolectric:4.11.1"
+
+    // Android Test Dependencies
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
+    androidTestImplementation "androidx.test:runner:1.5.2"
+    androidTestImplementation "androidx.test:rules:1.5.0"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:2.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.1"
+    androidTestImplementation "androidx.work:work-testing:2.9.0"
+    debugImplementation "androidx.fragment:fragment-testing:1.6.2"
+}
